@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+  </head>
+  <body>
+    <form method="POST">
+      <label for="name">Name</label>
+      <input name="name" id="name" type="text" />
+      <label for="username">Username</label>
+      <input name="username" id="username" type="text" />
+      <label for="password">Password</label>
+      <input name="password" id="password" type="password" />
+      <input type="radio" name="type" id="doctor" value="doctor" />
+      <label for="Doctor">Doctor</label> <br />
+      <input type="radio" name="type" id="patient" value="patient" />
+      <label for="patient">Patient</label> <br />
+      <button type="submit">Submit</button>
+      <p>{{ message }}</p>
+    </form>
+  </body>
+</html>

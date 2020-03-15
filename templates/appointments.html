@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Appointment</title>
+  </head>
+  <body>
+    <form method="POST">
+      <label>Dates Available</label>
+      <select name="dates" id="dates">
+        {% for i in dates %}
+        <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+      <label>Which one of it is your severe symptom</label>
+      <select id="symptoms" name="symptoms">
+        <option value="fever">Fever</option>
+        <option value="headpain">Head Pain</option>
+        <option value="chestpain">Chest Pain</option>
+        <option value="sick">Sick(Vomit)</option>
+        <option value="weak">Weak</option>
+      </select>
+      <button type="submit">Book</button>
+    </form>
+  </body>
+</html>

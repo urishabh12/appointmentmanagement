@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <Title>Home</Title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <th>Doctors</th>
+      </thead>
+      <tbody>
+        {%for i,j in doctors%}
+        <tr
+          onclick="window.open('{{url_for('appointment',username=j,patient=patient)}}','_top')"
+        >
+          <td>{{ i }}</td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </body>
+</html>
