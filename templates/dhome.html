@@ -2,15 +2,94 @@
 <html>
   <head>
     <Title>Home</Title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        background-image: linear-gradient(
+          90deg,
+          rgba(29, 151, 108, 1) 0%,
+          rgba(147, 249, 185, 1) 100%
+        );
+      }
+      .register {
+        background-color: white;
+      }
+    </style>
   </head>
   <body>
-    <form method="POST">
-      <input name="date" id="date" type="date" />
-      <label>From</label>
-      <input name="from" id="from" type="time" />
-      <label>To</label>
-      <input name="to" id="to" type="time" />
-      <button type="submit">Submit</button>
-    </form>
+    <div class="w3-bar w3-card-4">
+      <h2
+        class="w3-bar-item"
+        style="font-family: 'Fredoka One', cursive;margin-left: 510px;"
+      >
+        eAppointment
+      </h2>
+    </div>
+    <div
+      class="w3-container"
+      style="margin: 0 auto; width: 80%; margin-top: 100px; height: 100%"
+    >
+      <div
+        class="register  w3-card-4 w3-round-large"
+        style="width: 40%; float: left;"
+      >
+        <div class="w3-container">
+          <h2>You are available on?</h2>
+        </div>
+        <form method="POST" class="container">
+          <label class="w3-margin-left">Date</label>
+          <input
+            class=" w3-input w3-margin-bottom"
+            name="date"
+            id="date"
+            type="date"
+          />
+          <label class="w3-margin-left">From</label>
+          <input
+            class=" w3-input w3-margin-bottom"
+            name="from"
+            id="from"
+            type="time"
+          />
+          <label class="w3-margin-left">To</label>
+          <input
+            class=" w3-input w3-margin-bottom"
+            name="to"
+            id="to"
+            type="time"
+          />
+          <button
+            class="w3-margin-left w3-margin-bottom w3-button w3-black w3-round"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+      <div>
+        <table
+          class="w3-table-all w3-centered w3-hoverable"
+          style="float:right; width:40%;"
+        >
+          <thead>
+            <th class="w3-black">Patient</th>
+            <th class="w3-black">Time</th>
+            <th class="w3-black">Date</th>
+          </thead>
+          <tbody>
+            {% for i,j,k,l in appointment %}
+            <tr>
+              <td>{{ i }}</td>
+              <td>{{ j }}</td>
+              <td>{{ l }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </body>
 </html>
