@@ -75,12 +75,12 @@ def register():
 @app.route("/home/<string:username>/<string:typeof>", methods=['GET', 'POST'])
 def home(username, typeof):
     if typeof == "doctor":
-        return redirect(url_for('dhome', username=username, typeof=typeof))
+        return redirect(url_for('dhome', username=username))
     else:
-        return redirect(url_for('phome', username=username, typeof=typeof))
+        return redirect(url_for('phome', username=username))
 
-@app.route("/dhome/<string:username>/<string:typeof>", methods=['GET', 'POST'])
-def dhome(username, typeof):
+@app.route("/dhome/<string:username>", methods=['GET', 'POST'])
+def dhome(username):
     mycoltwo = mydb["booked"]
     appointments=[]
     date=getDate()
@@ -98,8 +98,8 @@ def dhome(username, typeof):
         return render_template('dhome.html', appointment=appointments)
     return render_template('dhome.html', appointment=appointments)
 
-@app.route("/phome/<string:username>/<string:typeof>", methods=['GET', 'POST'])
-def phome(username, typeof):
+@app.route("/phome/<string:username>", methods=['GET', 'POST'])
+def phome(username):
     mycol = mydb["users"]
     mycoltwo = mydb["booked"]
     doctors=[]
@@ -111,7 +111,7 @@ def phome(username, typeof):
     for x in mycoltwo.find():
         cdate=x["date"]
         if x["pusername"]==username and checkDate(cdate, date):
-            appointments.append((x["dusername"], x["from"], x["to"], x["date"]))
+            appointments.append((x["dusername"], x["from"], x["date"], x["pusername"]))
     if len(appointments)==0:
         return render_template('phome.html', doctors=doctors, patient=username, appointment="No Appointments available")
     return render_template('phome.html', doctors=doctors, patient=username, appointment=appointments)
@@ -138,12 +138,12 @@ def appointment(username, patient):
         fromm = data['ltime']
         to = data['to']
         ehr=int(to[0:2])
-        emin=int(to[3:5])
+        emin=int(to[3:])
         shr=int(fromm[0:2])
-        smin=int(fromm[3:5])
+        smin=int(fromm[3:])
         print(loong[0])
         time=add_time(loong[0], shr, smin)
-        if cmp_time(int(time[0:2]), int(time[3:5]), ehr, emin): 
+        if cmp_time(int(time[0:2]), int(time[3:]), ehr, emin): 
             bookdata = { "dusername":username,"pusername": patient, "from":fromm, "to":time, "date":date}
             book.insert_one(bookdata)
             myquery = {"date" : date, "username": username}
@@ -154,8 +154,35 @@ def appointment(username, patient):
             return render_template('appointments.html', dates=dates, message="Appointment not available")
     return render_template('appointments.html', dates=dates, message="")
 
+@app.route("/deleteappointment/<string:pusername>/<string:dusername>/<string:date>/<string:fromm>")
+def deleteappointment(pusername, dusername, date, fromm):
+    to=""
+    pto=""
+    mycol = mydb['booked']
+    for x in mycol.find():
+        if x["dusername"]==dusername and x["date"]==date and x["from"]==fromm:
+            pto = x["to"]
+            to = x["to"]
+            myquery = {"dusername":dusername, "pusername":pusername, "from":fromm, "date": date}
+            mycol.delete_one(myquery)
+            break
+    for x in mycol.find():
+        if x["dusername"]==dusername and x["date"]==date and x["from"]==pto:
+            print(fromm, to)
+            myquery = {"_id": x["_id"]}
+            newvalues = {"$set": {"from":fromm, "to":to}}
+            mycol.update_one(myquery, newvalues)
+            fromm = to
+            to = x["to"]
+            pto = x["to"]
+    newcol = mydb["avappoint"]
+    myquery = {"date" : date, "username": dusername}
+    newvalues = {"$set" : {"ltime" : fromm}}
+    newcol.update_one(myquery, newvalues)
+    return redirect(url_for("phome", username=pusername))
+
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
-    return render_template('login.html')
+    return redirect(url_for('login'))
 
 app.run(threaded=True)
