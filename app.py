@@ -96,7 +96,7 @@ def dhome(username):
         data = {'username': username, 'date':date, 'from':fromm, 'to':to, "total":0, "ltime":fromm}
         x=mycol.insert_one(data)
         return render_template('dhome.html', appointment=appointments)
-    return render_template('dhome.html', appointment=appointments)
+    return render_template('dhome.html', appointment=appointm)
 
 @app.route("/phome/<string:username>", methods=['GET', 'POST'])
 def phome(username):
@@ -113,7 +113,7 @@ def phome(username):
         if x["pusername"]==username and checkDate(cdate, date):
             appointments.append((x["dusername"], x["from"], x["date"], x["pusername"]))
     if len(appointments)==0:
-        return render_template('phome.html', doctors=doctors, patient=username, appointment="No Appointments available")
+        return render_template('phome.html', doctors=doctors, patient=username, appointment=appointments)
     return render_template('phome.html', doctors=doctors, patient=username, appointment=appointments)
 
 @app.route("/appointment/<string:username>/<string:patient>", methods=['GET', 'POST'])
